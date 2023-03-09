@@ -1,0 +1,158 @@
+ <!DOCTYPE html>
+<html>
+	<head>
+		<title>Kingtale</title>
+	</head>
+
+	<body>
+		<div id="topbar"> 
+			<img onclick="OpenMenu('Home')" style="height: 50px; cursor: pointer;" src="./Assets/Images/Logo.png">
+			<div onclick="OpenMenu('Games')" class="Topbarbutton">Juegos</div>
+		</div>
+		<iframe id="content" frameBorder = 0> </iframe>
+		<div id="bottombar">
+			<text class="bottomtext"><text onclick="OpenMenu('Contact')" style="cursor: pointer; color: blue; width: 50px" class="bottomtext">Contacto</text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tfo: 608 52 65 25</text>
+		</div>
+	</body>
+	
+	<script>
+	
+		function getAllUrlParams(url) {
+			var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+			var obj = {};
+
+			if (queryString) {
+				queryString = queryString.split('#')[0];
+
+				var arr = queryString.split('&');
+
+				for (var i = 0; i < arr.length; i++) {
+					var a = arr[i].split('=');
+					var paramName = a[0];
+					var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
+
+					// (optional) keep case consistent
+					paramName = paramName.toLowerCase();
+					if (typeof paramValue === 'string') paramValue = paramValue.toLowerCase();
+
+					// if the paramName ends with square brackets, e.g. colors[] or colors[2]
+					if (paramName.match(/\[(\d+)?\]$/)) {
+
+					// create key if it doesn't exist
+					var key = paramName.replace(/\[(\d+)?\]/, '');
+					if (!obj[key]) obj[key] = [];
+
+					// if it's an indexed array e.g. colors[2]
+					if (paramName.match(/\[\d+\]$/)) {
+						// get the index value and add the entry at the appropriate position
+						var index = /\[(\d+)\]/.exec(paramName)[1];
+						obj[key][index] = paramValue;
+					} 
+					else 
+					{
+						// otherwise add the value to the end of the array
+						obj[key].push(paramValue);
+					}
+					} 
+					else 
+					{
+					if (!obj[paramName]) 
+					{
+						obj[paramName] = paramValue;
+					} 
+					else if (obj[paramName] && typeof obj[paramName] === 'string')
+					{
+						obj[paramName] = [obj[paramName]];
+						obj[paramName].push(paramValue);
+					} 
+					else 
+					{
+						obj[paramName].push(paramValue);
+					}
+					}
+				}
+			}
+
+			return obj;
+		}
+
+	
+		function OpenMenu(url)
+		{
+			window.open(window.location.href.split('?')[0] + "?m=" + url,"_self");
+		}
+		
+		const Query = getAllUrlParams(window.location.search);
+		
+		if (Query.m)
+		{
+			document.getElementById("content").src = "./Pages/" + Query.m + ".html"
+		}
+		else
+		{
+			OpenMenu("Home");
+		}
+	</script>
+	
+	<style>
+		html, body {
+			margin: 0px;
+			padding: 0px;
+			
+			-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;
+		}
+		
+		.bottomtext {
+			position: absolute;
+			margin: 0px;
+			left: 0px;
+			width: 100%;
+			height: 25px;;
+			color: white;
+		}
+	
+		#topbar {
+			position: absolute;
+			top: 0px;
+			height: 50px;
+			width: 100%;
+			background-image: linear-gradient(rgb(25,25,25), rgb(40,40,40));
+		}
+		
+		#bottombar {
+			position: absolute;
+			bottom: 0px;
+			height: 25px;
+			width: 100%;
+			background-color: rgb(25,25,25);
+		}
+		
+		.Topbarbutton {
+			Position: absolute;
+			height: 14px;
+			top: 20px;
+			left: 200px;
+			cursor: pointer;
+			color: rgb(200, 200, 200);
+			
+			-moz-user-select: none; 
+			-webkit-user-select: none; 
+			-ms-user-select:none; 
+			user-select:none;
+			-o-user-select:none;
+			transition: 0.5s;
+		}
+		
+		.Topbarbutton:hover {
+			color: rgb(255, 255, 255);
+			transition: 0.5s;
+		}
+		
+		#content {
+			position: absolute;
+			top: 50px;
+			height: calc(100% - 75px);
+			width: 100%;
+		}
+	</style>
+</html> 
